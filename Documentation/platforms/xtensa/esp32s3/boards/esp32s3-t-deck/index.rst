@@ -105,24 +105,61 @@ You can use minicom with /dev/ttyACM0 port at 9600 8n1 or picocom this way:
 
   $ picocom -b9600 /dev/ttyACM0
 
-Buttons and LEDs
+Peripherals
 ================
 
 Board Buttons
 -------------
+There are two physical buttons BOOT(Trackball) and RST(Side).
+The board also has a power-on slider.
+The Trackball has one physical button and 4 magnetic switches used to sense the roll of the ball.
+
+===== ========== ==========
+Pin   Signal     Notes
+===== ========== ==========
+IO00  BOOT       Trackball button
+RST   RST        Reset button
+IO02  UP         Trackball up
+IO01  LEFT       Trackball left
+IO15  DOWN       Trackball down
+IO03  RIGHT      Trackball right
+===== ========== ==========
+
+Keyboard
+-------------
+The keyboard is internally connected to the ESP32-C3 microcontroller. It has preuploaded firmware for accessing the keyboard over i2c. The ESP32-C3 also controls the keyboard backlight
+
+===== ========== ==========
+Pin   Signal     Notes
+===== ========== ==========
+IO18  SDA        I2C SDA
+IO8   SCL        I2C SCL
+IO46  INT        Keyboard interrupt  
+===== ========== ==========
+
+LCD Display and Touchscreen
+-------------
+The LCD display is connected to the ESP32-S3 microcontroller over SPI.
+The LCD display is a 2.8 inch 320x240 pixel display with a ST7789 controller.
+The Touchscreen is connected to the ESP32-S3 microcontroller over I2C and uses a GT911 controller.
+===== ========== ==========
+Pin   Signal     Notes
+===== ========== ==========
+IO41  MOSI       SPI MOSI
+IO38  MISO       SPI MISO
+IO40  SCK        SPI SCK
+IO11  LCD DC     LCD Data/Command
+IO12  LCD CS     LCD Chip Select
+IO42  BCKL       Backlight Enable
+IO18  SDA        I2C SDA
+IO8   SCL        I2C SCL
+IO16  INT        Touchscreen interrupt  
+===== ========== ==========
+
+Speaker and Microphone
+-------------
 .. todo:: To be updated
-There are two buttons labeled BOOT and RST.  The RST button is not available
-to software.  It pulls the chip enable line that doubles as a reset line.
-
-The BOOT button is connected to IO0.  On reset it is used as a strapping
-pin to determine whether the chip boots normally or into the serial
-bootloader.  After reset, however, the BOOT button can be used for software
-input.
-
-Pin Mapping
-===========
-
-.. todo:: To be updated
+There are two buttons labeled BOOT and RST.
 
 ===== ========== ==========
 Pin   Signal     Notes
@@ -130,3 +167,37 @@ Pin   Signal     Notes
 ?     ?          ?
 ===== ========== ==========
 
+SD Card
+-------------
+.. todo:: To be updated
+There are two buttons labeled BOOT and RST.
+
+===== ========== ==========
+Pin   Signal     Notes
+===== ========== ==========
+?     ?          ?
+===== ========== ==========
+
+LORA Radio
+-------------
+.. todo:: To be updated
+There are two buttons labeled BOOT and RST.
+
+===== ========== ==========
+Pin   Signal     Notes
+===== ========== ==========
+?     ?          ?
+===== ========== ==========
+
+Other
+-------------
+.. todo:: Confirm the information below
+The board has a resistor divider for measuring the battery voltage and a Power On pin.
+To keep the ESP32 from turning off keep the Power On pin high.
+
+===== ========== ==========
+Pin   Signal     Notes
+===== ========== ==========
+IO4   BAT_ADC    Multiply measured voltage by 2 to get battery voltage
+IO10  PWR_ON     Keep high to keep the ESP32 from turning off
+===== ========== ==========
