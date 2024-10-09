@@ -126,7 +126,7 @@ IO03  RIGHT      Trackball right
 ===== ========== ==========
 
 Keyboard
--------------
+--------
 The keyboard is internally connected to the ESP32-C3 microcontroller. It has preuploaded firmware for accessing the keyboard over i2c. The ESP32-C3 also controls the keyboard backlight
 
 ===== ========== ==========
@@ -138,10 +138,11 @@ IO46  INT        Keyboard interrupt
 ===== ========== ==========
 
 LCD Display and Touchscreen
--------------
+---------------------------
 The LCD display is connected to the ESP32-S3 microcontroller over SPI.
 The LCD display is a 2.8 inch 320x240 pixel display with a ST7789 controller.
 The Touchscreen is connected to the ESP32-S3 microcontroller over I2C and uses a GT911 controller.
+
 ===== ========== ==========
 Pin   Signal     Notes
 ===== ========== ==========
@@ -157,8 +158,9 @@ IO16  INT        Touchscreen interrupt
 ===== ========== ==========
 
 Speaker and Microphone
--------------
+----------------------
 .. todo:: To be updated
+
 There are two buttons labeled BOOT and RST.
 
 ===== ========== ==========
@@ -168,8 +170,9 @@ Pin   Signal     Notes
 ===== ========== ==========
 
 SD Card
--------------
+-------
 .. todo:: To be updated
+
 There are two buttons labeled BOOT and RST.
 
 ===== ========== ==========
@@ -179,8 +182,9 @@ Pin   Signal     Notes
 ===== ========== ==========
 
 LORA Radio
--------------
+----------
 .. todo:: To be updated
+
 There are two buttons labeled BOOT and RST.
 
 ===== ========== ==========
@@ -190,8 +194,9 @@ Pin   Signal     Notes
 ===== ========== ==========
 
 Other
--------------
+-----
 .. todo:: Confirm the information below
+
 The board has a resistor divider for measuring the battery voltage and a Power On pin.
 To keep the ESP32 from turning off keep the Power On pin high.
 
