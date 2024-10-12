@@ -100,6 +100,18 @@
 #define DEBUGPOINT_STEPPOINT     0x05
 
 /****************************************************************************
+ * Name: up_cpu_index
+ *
+ * Description:
+ *   Return the real core number regardless CONFIG_SMP setting
+ *
+ ****************************************************************************/
+
+#ifndef CONFIG_ARCH_HAVE_MULTICPU
+#  define up_cpu_index() 0
+#endif /* CONFIG_ARCH_HAVE_MULTICPU */
+
+/****************************************************************************
  * Public Types
  ****************************************************************************/
 
@@ -2363,6 +2375,7 @@ char up_romgetc(FAR const char *ptr);
 
 void up_mdelay(unsigned int milliseconds);
 void up_udelay(useconds_t microseconds);
+void up_ndelay(unsigned long nanoseconds);
 
 /****************************************************************************
  * These are standard interfaces that are exported by the OS for use by the
@@ -2818,9 +2831,9 @@ void arch_sporadic_resume(FAR struct tcb_s *tcb);
  ****************************************************************************/
 
 void up_perf_init(FAR void *arg);
-unsigned long up_perf_gettime(void);
+clock_t up_perf_gettime(void);
 unsigned long up_perf_getfreq(void);
-void up_perf_convert(unsigned long elapsed, FAR struct timespec *ts);
+void up_perf_convert(clock_t elapsed, FAR struct timespec *ts);
 
 /****************************************************************************
  * Name: up_show_cpuinfo

@@ -43,10 +43,6 @@
 
 volatile spinlock_t g_irq_spin = SP_UNLOCKED;
 
-/* Handles nested calls to spin_lock_irqsave and spin_unlock_irqrestore */
-
-volatile uint8_t g_irq_spin_count[CONFIG_SMP_NCPUS];
-
 #ifdef CONFIG_RW_SPINLOCK
 /* Used for access control */
 
@@ -193,7 +189,7 @@ irqstate_t write_lock_irqsave(rwlock_t *lock)
 
   if (NULL == lock)
     {
-      int me = up_cpu_index();
+      int me = this_cpu();
       if (0 == g_irq_rwspin_count[me])
         {
           write_lock(&g_irq_rwspin);
@@ -243,7 +239,7 @@ void write_unlock_irqrestore(rwlock_t *lock, irqstate_t flags)
 {
   if (NULL == lock)
     {
-      int me = up_cpu_index();
+      int me = this_cpu();
       DEBUGASSERT(0 < g_irq_rwspin_count[me]);
       g_irq_rwspin_count[me]--;
 

@@ -241,7 +241,7 @@ config MM_HEAP_MEMPOOL_CHUNK_SIZE
 config MM_HEAP_MEMPOOL_BACKTRACE_SKIP
 	int "The skip depth of backtrace for mempool"
 	default 6
-	depends on MM_HEAP_MEMPOOL_THRESHOLD != 0 && MM_BACKTRACE > 0
+	depends on MM_BACKTRACE > 0
 	---help---
 		This number is the skipped backtrace depth for mempool.
 
@@ -284,7 +284,6 @@ endchoice
 
 config MM_KASAN_ALL
 	bool "Enable KASan for the entire image"
-	depends on MM_KASAN
 	default y
 	---help---
 		This option activates address sanitizer for the entire image.
@@ -311,7 +310,6 @@ config MM_KASAN_DISABLE_NULL_POINTER_CHECK
 
 config MM_KASAN_DISABLE_READS_CHECK
 	bool "Disable reads check"
-	depends on MM_KASAN
 	default n
 	---help---
 		This option disable kasan reads check. It speeds up performance
@@ -321,10 +319,15 @@ config MM_KASAN_DISABLE_READS_CHECK
 
 config MM_KASAN_DISABLE_WRITES_CHECK
 	bool "Disable writes check"
-	depends on MM_KASAN
 	default n
 	---help---
 		This option disable kasan writes check.
+
+config MM_KASAN_SKIP_ZERO_TAGS
+	bool "Enable skip check zero tags"
+	default LIBC_MODLIB
+	---help---
+		This option enables not checking for zero tags.
 
 config MM_KASAN_GLOBAL
 	bool "Enable global data check"
@@ -361,7 +364,6 @@ config MM_KASAN_DISABLE_READ_PANIC
 
 config MM_KASAN_DISABLE_WRITE_PANIC
 	bool "Disable panic on kasan write error"
-	depends on MM_KASAN
 	default n
 	---help---
 		This option disable panic on kasan write error. It will print error info
@@ -462,5 +464,13 @@ config MM_FREE_DELAYCOUNT_MAX
 		Set to 0 to disable the delayed free mechanism. Otherwise,
 		the value decides the maximum number of memory nodes that
 		will be delayed to free.
+
+config MM_HEAP_BIGGEST_COUNT
+	int "The largest malloc element dump count"
+	default 30
+	---help---
+		The dump support for largest allocated memory.
+		If too big, should take care of stack usage.
+		Define 0 to disable largest allocated element dump feature.
 
 source "mm/iob/Kconfig"

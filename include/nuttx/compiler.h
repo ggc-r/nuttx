@@ -176,7 +176,7 @@
  * unnecessary "weak" functions can be excluded from the link.
  */
 
-#undef CONFIG_HAVE_WEAKFUNCTIONS
+#  undef CONFIG_HAVE_WEAKFUNCTIONS
 
 #  if !defined(__CYGWIN__) && !defined(CONFIG_ARCH_GNU_NO_WEAKFUNCTIONS)
 #    define CONFIG_HAVE_WEAKFUNCTIONS 1
@@ -264,7 +264,11 @@
 
 /* The nooptimiziation_function attribute no optimize */
 
-#  define nooptimiziation_function __attribute__((optimize(0)))
+#  if defined(__clang__)
+#    define nooptimiziation_function __attribute__((optnone))
+#  else
+#    define nooptimiziation_function __attribute__((optimize("O0")))
+#  endif
 
 /* The nosanitize_address attribute informs GCC don't sanitize it */
 
@@ -369,6 +373,7 @@
 #  define syslog_like(a, b) __attribute__((__format__(__syslog__, a, b)))
 #  define scanf_like(a, b) __attribute__((__format__(__scanf__, a, b)))
 #  define strftime_like(a) __attribute__((__format__(__strftime__, a, 0)))
+#  define object_size(o, t) __builtin_object_size(o, t)
 
 /* GCC does not use storage classes to qualify addressing */
 
@@ -642,6 +647,7 @@
 #  define syslog_like(a, b)
 #  define scanf_like(a, b)
 #  define strftime_like(a)
+#  define object_size(o, t) ((size_t)-1)
 
 /* The reentrant attribute informs SDCC that the function
  * must be reentrant.  In this case, SDCC will store input
@@ -790,6 +796,7 @@
 #  define syslog_like(a, b)
 #  define scanf_like(a, b)
 #  define strftime_like(a)
+#  define object_size(o, t) ((size_t)-1)
 
 /* REVISIT: */
 
@@ -909,6 +916,7 @@
 #  define syslog_like(a, b)
 #  define scanf_like(a, b)
 #  define strftime_like(a)
+#  define object_size(o, t) ((size_t)-1)
 
 #  define FAR
 #  define NEAR
@@ -1095,6 +1103,7 @@
 #  define syslog_like(a, b)
 #  define scanf_like(a, b)
 #  define strftime_like(a)
+#  define object_size(o, t) ((size_t)-1)
 
 #  define FAR
 #  define NEAR
@@ -1168,6 +1177,7 @@
 #  define syslog_like(a, b)
 #  define scanf_like(a, b)
 #  define strftime_like(a)
+#  define object_size(o, t) ((size_t)-1)
 
 #  define FAR
 #  define NEAR

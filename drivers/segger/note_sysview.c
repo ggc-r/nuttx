@@ -79,6 +79,15 @@ static void note_sysview_heap(FAR struct note_driver_s *drv,
                               uint8_t event, FAR void *heap, FAR void *mem,
                               size_t size, size_t curused);
 #endif
+#ifdef CONFIG_SCHED_INSTRUMENTATION_WDOG
+static void note_sysview_wdog(FAR struct note_driver_s *drv, uint8_t event,
+                              FAR void *handler, FAR const void *arg);
+#endif
+
+#ifdef CONFIG_SCHED_INSTRUMENTATION_DUMP
+static void note_sysview_vprintf(FAR struct note_driver_s *drv, uintptr_t ip,
+                                 FAR const char *fmt, va_list va);
+#endif
 
 /****************************************************************************
  * Private Data
@@ -119,8 +128,16 @@ static const struct note_driver_ops_s g_note_sysview_ops =
 #ifdef CONFIG_SCHED_INSTRUMENTATION_IRQHANDLER
   note_sysview_irqhandler,    /* irqhandler */
 #endif
+#ifdef CONFIG_SCHED_INSTRUMENTATION_WDOG
+  note_sysview_wdog,          /* wdog */
+#endif
 #ifdef CONFIG_SCHED_INSTRUMENTATION_HEAP
   note_sysview_heap,          /* heap */
+#endif
+
+#ifdef CONFIG_SCHED_INSTRUMENTATION_DUMP
+  NULL,                       /* event */
+  note_sysview_vprintf,       /* vprintf */
 #endif
 };
 
@@ -383,6 +400,29 @@ static void note_sysview_heap(FAR struct note_driver_s *drv,
       default:
         break;
     }
+}
+#endif
+
+#ifdef CONFIG_SCHED_INSTRUMENTATION_WDOG
+static void note_sysview_wdog(FAR struct note_driver_s *drv, uint8_t event,
+                              FAR void *handler, FAR const void *arg)
+{
+  if (event == NOTE_WDOG_ENTER)
+    {
+      SEGGER_SYSVIEW_RecordEnterTimer((uintptr_t)handler);
+    }
+  else if (event == NOTE_WDOG_LEAVE)
+    {
+      SEGGER_SYSVIEW_RecordExitTimer();
+    }
+}
+#endif
+
+#ifdef CONFIG_SCHED_INSTRUMENTATION_DUMP
+static void note_sysview_vprintf(FAR struct note_driver_s *drv, uintptr_t ip,
+                                 FAR const char *fmt, va_list va)
+{
+  SEGGER_SYSVIEW_VPrintfHost(fmt, &va);
 }
 #endif
 
